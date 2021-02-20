@@ -139,34 +139,219 @@ class Database():
 class User():
     
     def __init__(self):
-        self.email = None
-        self.pin = None
+        self._email = None
+        self._pin = None
+        self._pinString = None
+        self._option = None
+        self._menu = Menu()
+        self._software = Software()
+        self._file = File()
+        
+    def getEmail(self):
+        return self._email
+    
+    def getPin(self):
+        return self._pin
+    
+    def getPinString(self):
+        return self._pinString
+    
+    def getOption(self):
+        return self._option
+    
+    def getMenu(self):
+        return self._menu
+    
+    def getSoftware(self):
+        return self._software
+    
+    def getFile(self):
+        return self._file
+    
+    def setEmail(self, x):
+        self._email = x
+        
+    def setPin(self, x):
+        self._pin = x
+        
+    def setPinString(self, x):
+        self._pinString = x
+        
+    def setOption(self, x):
+        self._option = x
+        
+    def setFile(self, x):
+        self._file = x
+        
+    def getLoginOption(self):
+        while self.getOption() != 0:
+            #try to convert user input to a number
+            try:
+                print(self.getMenu().getLoginMenu())
+                self.setOption(int(input("Enter your option: ")))
+                if self.getOption() == 0:
+                    print()
+                    break;
+                elif self.getOption() == 1:
+                    self.setOption(self.register())
+                    if self.getOption() == 0:
+                        self.setOption(None)
+                        continue
+                elif self.getOption() == 2:
+                    self.setOption(self.logIn())
+                    if self.getOption() == 0:
+                        self.setOption(None)
+                        continue
+                    elif self.getOption() != 0:
+                        self.getMenuRequirementOption()
+                        if self.getOption() == 0:
+                            self.setOption(None)
+                            continue
+                        self.getTabRequirementOption()
+                        if self.getOption() == 0:
+                            self.setOption(None)
+                            continue
+                        self.getToolbarRequirementOption()
+                        if self.getOption() == 0:
+                            self.setOption(None)
+                            continue
+                        self.getFile().createDirectory(self.getEmail())
+                        self.getFile().createPlantUMLSource(self.getSoftware())
+                        self.getFile().createImage()
+                        print(self.getMenu().getCreatingImageMessage())
+                        self.getFile().showImage()
+                else:
+                    print()
+                    print("Invalid option.")
+            #if user does not input a number, this error is thrown      
+            except ValueError:
+                print()
+                print("Input must be a number.")
+        print("Thanks for using this program! Goodbye!")
+        
+    def getMenuRequirementOption(self):
+        while self.getOption() != 0:
+            try:
+                print(self.getMenu().getMenuRequirementMenu())
+                self.setOption(int(input("Enter your option: ")))
+                if self.getOption() == 0:
+                    return 0
+                if self.getOption() == 1:
+                    self.getSoftware().setMenuFile(True)
+                    self.getSoftware().setMenuRepo(True)
+                    self.getSoftware().setMenuComm(True)
+                    self.getSoftware().setMenuTools(False)
+                    self.getSoftware().setMenuView(False)
+                    self.getSoftware().setMenuNav(False)
+                    self.getSoftware().setMenuPlug(False)
+                    self.getSoftware().setMenuHelp(True)
+                    self.getSoftware().setMenuItemCount(4)
+                    return 1
+                elif self.getOption() == 2:
+                    self.getSoftware().setMenuFile(True)
+                    self.getSoftware().setMenuRepo(True)
+                    self.getSoftware().setMenuComm(True)
+                    self.getSoftware().setMenuTools(True)
+                    self.getSoftware().setMenuView(False)
+                    self.getSoftware().setMenuNav(False)
+                    self.getSoftware().setMenuPlug(True)
+                    self.getSoftware().setMenuHelp(True)
+                    self.getSoftware().setMenuItemCount(6)
+                    return 2
+                elif self.getOption() == 3:
+                    self.getSoftware().setMenuFile(True)
+                    self.getSoftware().setMenuRepo(True)
+                    self.getSoftware().setMenuComm(True)
+                    self.getSoftware().setMenuTools(True)
+                    self.getSoftware().setMenuView(True)
+                    self.getSoftware().setMenuNav(True)
+                    self.getSoftware().setMenuPlug(True)
+                    self.getSoftware().setMenuHelp(True)
+                    self.getSoftware().setMenuItemCount(8)
+                    return 3
+                else:
+                    print()
+                    print("Invalid option.")
+            #if user does not input a number, this error is thrown      
+            except ValueError:
+                print()
+                print("Input must be a number.")
+        return 0
+                
+    def getTabRequirementOption(self):
+        while self.getOption() != 0:
+            try:
+                print(self.getMenu().getTabRequirementMenu())
+                self.setOption(int(input("Enter your option: ")))
+                if self.getOption() == 0:
+                    return 0
+                elif self.getOption() == 1:
+                    self.getSoftware().setVTabs(True)
+                    self.getSoftware().setHTabs(False)
+                    return 1
+                elif self.getOption() == 2:
+                    self.getSoftware().setVTabs(False)
+                    self.getSoftware().setHTabs(True)
+                    return 2
+                else:
+                    print()
+                    print("Invalid option.")
+            #if user does not input a number, this error is thrown      
+            except ValueError:
+                print()
+                print("Input must be a number.")
+
+    def getToolbarRequirementOption(self):
+        while self.getOption() != 0:
+            try:
+                print(self.getMenu().getToolbarRequirementMenu())
+                self.setOption(int(input("Enter your option: ")))
+                if self.getOption() == 0:
+                    return 0
+                elif self.getOption() == 1:
+                    self.getSoftware().setToolbar(True)
+                    db = Database()
+                    db.insertSpecification(self.getEmail(), self.getSoftware())
+                    return 1
+                elif self.getOption() == 2:
+                    self.getSoftware().setToolbar(False)
+                    db = Database()
+                    db.insertSpecification(self.getEmail(), self.getSoftware())
+                    return 2
+                else:
+                    print()
+                    print("Invalid option.")
+            #if user does not input a number, this error is thrown      
+            except ValueError:
+                print()
+                print("Input must be a number.")
 
     def register(self):
         print()
         print("**********************************************")
         print("*           Registering a new user            *")
         print("**********************************************")
+        #database object to check if user is available
         db = Database()
         print()
-        self.email = input("Enter your email (0 to exit): ")
-        if self.email == '0':
+        self.setEmail(input("Enter your email (0 to exit): "))
+        if self.getEmail() == '0':
             return 0
-        while not (self.validEmail(self.email)):
+        while not (self.validEmail(self.getEmail())):
             print()
             print("Email must be valid.")
             print()
-            self.email = input("Enter your email (0 to exit): ")
-            if self.email == '0':
+            self.setEmail(input("Enter your email (0 to exit): "))
+            if self.getEmail() == '0':
                 return 0
-        if db.userAvailable(self.email):
+        if db.userAvailable(self.getEmail()):
             print()
             print("Username is available.")
-            self.pin = self.getPin()
-            if (self.pin == 0):
-                return
+            self.setPin(self.getUserPin())
+            if self.getPin() == 0:
+                return 0
             print()
-            db.insertUserAndPin(self.email, self.pin)
+            db.insertUserAndPin(self.getEmail(), self.getPin())
             print("**********************************************")
             print("*           New User Added                     *")
             print("**********************************************")
@@ -177,28 +362,28 @@ class User():
     
     def validEmail(self, email):
         regex = '^[A-Za-z0-9]+[\._]?[A-Za-z0-9]+[@]\w+[.]\w{2,3}$'
-        if re.search(regex,self.email):
+        if re.search(regex,email):
             return True
         else:
             return False
     
-    def getPin(self):
+    def getUserPin(self):
             while (True):
                 print()
-                pinString = input("Enter your 4-digit pin number (0 to exit): ")
+                self.setPinString(input("Enter your 4-digit pin number (0 to exit): "))
                 try:
-                    pin = int(pinString)
-                    if (pin == 0):
+                    self.setPin(int(self.getPinString()))
+                    if (self.getPin() == 0):
                         break;
-                    if len(pinString) < 4 or len(pinString) > 4:
+                    if len(self.getPinString()) < 4 or len(self.getPinString()) > 4:
                         print()
                         print("Pin must contain four digits.")
-                    elif len(pinString) == 4:
+                    elif len(self.getPinString()) == 4:
                         break;
                 except ValueError:
                     print()
                     print("Pin numbers can only contain digits.")
-            return pin
+            return self.getPin()
     
     def logIn(self):
         print()
@@ -206,29 +391,28 @@ class User():
         print("*                  Log in Screen                   *")
         print("**********************************************")
         print()
-        self.email = None
-        self.email = input("Enter your email (0 to exit): ")
-        if (self.email == '0'):
-            return self.email
-        while not (self.validEmail(self.email)):
+        self.setEmail(None)
+        self.setEmail(input("Enter your email (0 to exit): "))
+        if (self.getEmail() == '0'):
+            return 0
+        while not (self.validEmail(self.getEmail())):
             print()
             print("Email must be valid.")
             print()
-            self.email = input("Enter your email (0 to exit): ")
-            if (self.email == '0'):
-                return self.email
-        self.pin = self.getPin()
-        if (self.pin == 0):
-            return self.pin
+            self.setEmail(input("Enter your email (0 to exit): "))
+            if (self.getEmail() == '0'):
+                return 0
+        self.setPin(self.getUserPin())
+        if (self.getPin() == 0):
+            return 0
         db = Database()
-        while not (db.validPin(self.email, self.pin)):
+        while not (db.validPin(self.getEmail(), self.getPin())):
             print()
             print("Pin does not match pin on file.")
             print("Please try again.")
-            self.pin = self.getPin()
-            if (self.pin == 0):
-                return self.pin
-        print()
+            self.setPin(self.getUserPin())
+            if (self.getPin() == 0):
+                return 0
         return
     
 class Software():
@@ -320,14 +504,42 @@ class Software():
     
 class File():
     
-    def __init__(self, software, email):
-        self._directory = email
+    def __init__(self):
+        self._directory = None
         self._parentDirectory = "./"
-        self._path = os.path.join(self._parentDirectory, self._directory)
-        if not os.path.isdir(self._path):
-            os.mkdir(self._path)
+        self._path = None
+        self._plantUMLText = None
+        
+    def getDirectory(self):
+        return self._directory
+    
+    def getParentDirectory(self):
+        return self._parentDirectory
+    
+    def getPath(self):
+        return self._path
+    
+    def getPlantUMLText(self):
+        return self._plantUMLText
+    
+    def setDirectory(self, x):
+        self._directory = x
+        
+    def setPath(self, x):
+        self._path = x
+        
+    def setPlantUMLText(self, x):
+        self._plantUMLText = x
+        
+    def createDirectory(self, email):
+        self.setDirectory(email)
+        self.setPath(os.path.join(self.getParentDirectory(), self.getDirectory()))
+        if not os.path.isdir(self.getPath()):
+            os.mkdir(self.getPath())
+            
+    def createPlantUMLSource(self, software):
         if software.getHTabs() and software.getMenuItemCount() == 4 and software.getToolbar():
-            self._specificationsText = """@startsalt
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Help }
@@ -352,12 +564,12 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel]|[Ok]} 
 }
 } 
-@endsalt"""
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)
+@endsalt""")
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())
                 
         elif software.getHTabs() and software.getMenuItemCount() == 4 and not software.getToolbar():
-            self._specificationsText = """@startsalt
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Help }
@@ -382,12 +594,12 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel]|[Ok]} 
 }
 } 
-@endsalt"""
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)    
+@endsalt""")
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())    
             
         elif  software.getHTabs() and software.getMenuItemCount() == 6 and software.getToolbar():
-            self._specificationsText = """@startsalt
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Plugins | Tools | Help }
@@ -412,12 +624,12 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel]|[Ok]} 
 }
 } 
-@endsalt"""
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)
+@endsalt""")
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())
                 
-        elif  software.getHTabs() and software.getMenuItemCount() == 6 and not software.getToolbar():
-            self._specificationsText = """@startsalt
+        elif software.getHTabs() and software.getMenuItemCount() == 6 and not software.getToolbar():
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Plugins | Tools | Help }
@@ -442,12 +654,12 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel]|[Ok]} 
 }
 } 
-@endsalt"""
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)
+@endsalt""")
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())
                 
         elif  software.getHTabs() and software.getMenuItemCount() == 8 and software.getToolbar():
-            self._specificationsText = """@startsalt
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Plugins | Tools | View | Navigate | Help }
@@ -472,12 +684,12 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel]|[Ok]} 
 }
 } 
-@endsalt"""
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)
+@endsalt""")
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())
                 
         elif  software.getHTabs() and software.getMenuItemCount() == 8 and not software.getToolbar():
-            self._specificationsText = """@startsalt
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Plugins | Tools | View | Navigate | Help }
@@ -502,12 +714,12 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel]|[Ok]} 
 }
 } 
-@endsalt"""
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)                
+@endsalt""")
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())                
 
         elif software.getVTabs() and software.getMenuItemCount() == 4 and software.getToolbar():
-            self._specificationsText = """@startsalt
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Help | <&home> <&folder> <&plus> <&chevron-left> <&chevron-right> <&clipboard> <&terminal> <&fork> <&transfer> <&loop-circular> <&cog> <&question-mark>}
@@ -537,12 +749,12 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel]|[Ok]} 
 }
 } 
-@endsalt"""
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)
+@endsalt""")
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())
                 
         elif software.getVTabs() and software.getMenuItemCount() == 4 and not software.getToolbar():
-            self._specificationsText = """@startsalt
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Help }
@@ -572,12 +784,12 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel]|[Ok]} 
 }
 } 
-@endsalt"""
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)
+@endsalt""")
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())
                 
         elif software.getVTabs() and software.getMenuItemCount() == 6 and software.getToolbar():
-            self._specificationsText = """@startsalt
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Plugins | Tools | Help | <&home> <&folder> <&plus> <&chevron-left> <&chevron-right> <&clipboard> <&terminal> <&fork> <&transfer> <&loop-circular> <&cog> <&question-mark>}
@@ -607,13 +819,13 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel]|[Ok]} 
 }
 } 
-@endsalt"""
+@endsalt""")
 
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())
                 
         elif software.getVTabs() and software.getMenuItemCount() == 6 and not software.getToolbar():
-            self._specificationsText = """@startsalt
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Plugins | Tools | Help }
@@ -643,13 +855,13 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel]|[Ok]} 
 }
 } 
-@endsalt"""
+@endsalt""")
 
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())
 
         if software.getVTabs() and software.getMenuItemCount() == 8 and software.getToolbar():
-            self._specificationsText = """@startsalt
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Plugins | Tools | View | Navigate | Help | }
@@ -679,12 +891,12 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel] |[Ok]} 
 }
 } 
-@endsalt"""
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)
+@endsalt""")
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())
             
         elif software.getVTabs() and software.getMenuItemCount() == 8 and not software.getToolbar():
-            self._specificationsText = """@startsalt
+            self.setPlantUMLText("""@startsalt
 scale 5
 {+
 {* File | Repository | Command | Plugins | Tools | View | Navigate | Help | }
@@ -714,12 +926,10 @@ Include: | [X] readme.md | [X] .gitignore
 |.|[Cancel] |[Ok]} 
 }
 } 
-@endsalt"""
-            with open(abspath(self._path + '/plant-uml.txt'), 'w') as writer:
-                writer.write(self._specificationsText)
-    def getPath(self):
-        return self._path
-    
+@endsalt""")
+            with open(abspath(self.getPath() + '/plant-uml.txt'), 'w') as writer:
+                writer.write(self.getPlantUMLText())
+                
     def createImage(self):                  
 
         # create a server object to call for your computations
@@ -736,9 +946,6 @@ Include: | [X] readme.md | [X] .gitignore
         
 class Menu():
 
-    user = User()
-    software = Software()
-    
     def __init__ (self):
         self._loginMenu = """
 Welcome to the Software Specifications Application.
@@ -782,16 +989,22 @@ Please choose from the choices below.
         self._toolbarRequirementMenu = """
 3. Should the application contain a toolbar?
     
-****************************************************************************************
-*                                                                                                                   *
-*   [1] Yes                                                                                                     *
-*   [2] No                                                                                                       *
-*   [0] Exit the Program                                                                                 *
-*                                                                                                                   *
-****************************************************************************************
+*************************************
+*                                               * 
+*   [1] Yes                                 *
+*   [2] No                                  *
+*   [0] Exit the Program             *
+*                                               *
+*************************************
 """
-        self._option = None
-    
+
+        self._creatingImageMessage = """
+*********************************************************
+*   Creating and opening specifications image...  *      
+*********************************************************
+
+Returning to main menu..."""
+
     def getLoginMenu(self):
         return self._loginMenu
     
@@ -804,157 +1017,15 @@ Please choose from the choices below.
     def getToolbarRequirementMenu(self):
         return self._toolbarRequirementMenu
     
-    def getOption(self):
-        return self._option
+    def getCreatingImageMessage(self):
+        return self._creatingImageMessage
     
-    def setOption(self, x):
-        self._option =  x
-    
-    def getLoginOption(self):
-        while self.getOption() != 0:
-            #try to convert user input to a number
-            try:
-                print(self.getLoginMenu())
-                self.setOption(int(input("Enter your option: ")))
-                if self.getOption() == 0:
-                    print()
-                    break;
-                elif self.getOption() == 1:
-                    self.setOption(self.user.register())
-                    # Insert Quit Code
-                elif self.getOption() == 2:
-                    self.setOption(self.user.logIn())
-                    if self.getOption() != '0' and self.getOption() != 0:
-                        self.getMenuRequirementOption()
-                        self.getTabRequirementOption()
-                        self.getToolbarRequirementOption()
-                        file = File(self.software, self.user.email)
-                        file.createImage()
-                        file.showImage()
-                    else:
-                        self.setOption(None)
-                        continue
-                else:
-                    print()
-                    print("Invalid option.")
-                    print()
-            #if user does not input a number, this error is thrown      
-            except ValueError:
-                print()
-                print("Input must be a number.")
-                print()
-        print("Thanks for using this program! Goodbye!")
-
-    def getMenuRequirementOption(self):
-        while self.getOption() != 0:
-            try:
-                print(self.getMenuRequirementMenu())
-                self.setOption(nt(input("Enter your option: ")))
-                if self.getOption() == 0:
-                    print()
-                    break;
-                elif self.getOption() == 1:
-                    self.software.setMenuFile(True)
-                    self.software.setMenuRepo(True)
-                    self.software.setMenuComm(True)
-                    self.software.setMenuTools(False)
-                    self.software.setMenuView(False)
-                    self.software.setMenuNav(False)
-                    self.software.setMenuPlug(False)
-                    self.software.setMenuHelp(True)
-                    self.software.setMenuItemCount(4)
-                    return
-                elif self.getOption() == 2:
-                    self.software.setMenuFile(True)
-                    self.software.setMenuRepo(True)
-                    self.software.setMenuComm(True)
-                    self.software.setMenuTools(True)
-                    self.software.setMenuView(False)
-                    self.software.setMenuNav(False)
-                    self.software.setMenuPlug(True)
-                    self.software.setMenuHelp(True)
-                    self.software.setMenuItemCount(6)
-                    return
-                elif self.getOption() == 3:
-                    self.software.setMenuFile(True)
-                    self.software.setMenuRepo(True)
-                    self.software.setMenuComm(True)
-                    self.software.setMenuTools(True)
-                    self.software.setMenuView(True)
-                    self.software.setMenuNav(True)
-                    self.software.setMenuPlug(True)
-                    self.software.setMenuHelp(True)
-                    self.software.setMenuItemCount(8)
-                    return
-                else:
-                    print()
-                    print("Invalid option.")
-                    print()
-            #if user does not input a number, this error is thrown      
-            except ValueError:
-                print()
-                print("Input must be a number.")
-                print()
-                
-    def getTabRequirementOption(self):
-        while self.getOption() != 0:
-            try:
-                print(self.getTabRequirementMenu())
-                self.setOption(int(input("Enter your option: ")))
-                if self.getOption() == 0:
-                    print()
-                    break;
-                elif self.getOption() == 1:
-                    self.software.setVTabs(True)
-                    self.software.setHTabs(False)
-                    return
-                elif self.getOption() == 2:
-                    self.software.setVTabs(False)
-                    self.software.setHTabs(True)
-                    return
-                else:
-                    print()
-                    print("Invalid option.")
-                    print()
-            #if user does not input a number, this error is thrown      
-            except ValueError:
-                print()
-                print("Input must be a number.")
-                print()
-
-    def getToolbarRequirementOption(self):
-        while self.getOption() != 0:
-            try:
-                print(self.getToolbarRequirementMenu())
-                self.setOption(int(input("Enter your option: ")))
-                if self.getOption() == 0:
-                    print()
-                    break;
-                elif self.getOption() == 1:
-                    self.software.setToolbar(True)
-                    db = Database()
-                    db.insertSpecification(self.user.email, self.software)
-                    return
-                elif self.getOption() == 2:
-                    self.software.setToolbar(False)
-                    db = Database()
-                    db.insertSpecification(self.user.email, self.software)
-                    return
-                else:
-                    print()
-                    print("Invalid option.")
-                    print()
-            #if user does not input a number, this error is thrown      
-            except ValueError:
-                print()
-                print("Input must be a number.")
-                print()
       
 def main():
     db = Database()
     db.createConnection()
     db.createTables()
-    menu = Menu()
-    menu.getLoginOption()
+    user = User()
+    user.getLoginOption()
     
 if __name__ == "__main__": main()
