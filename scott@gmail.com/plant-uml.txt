@@ -1,7 +1,7 @@
 @startsalt
 scale 5
 {+
-{* File | Repository | Command | Plugins | Tools | View | Navigate | Help }
+{* File | Repository | Command | Plugins | Tools | Help }
 {!                        
 {/ Commit | Diff | <b>File Tree</b> | Console} { Toolbar:    <&home> <&folder> <&plus> <&chevron-left> <&chevron-right> <&clipboard> <&terminal> <&fork> <&transfer> <&loop-circular> <&cog> <&question-mark>}
 {T 
